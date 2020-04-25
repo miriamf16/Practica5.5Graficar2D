@@ -19,6 +19,12 @@ public class Vector2D {
         this.y=0;
     }
 
+    public Vector2D(double valor)
+    {
+        this.x = valor;
+        this.y = valor;
+    }
+
     public Vector2D Por(Vector2D B){
         Vector2D C = new Vector2D();
         C.x= this.x * B.x;

@@ -34,5 +34,7 @@ public class Superficie{
     }
 
 
-
+    public void SetImagen(BufferedImage despues) {
+        this.imagen= despues;
+    }
 }
