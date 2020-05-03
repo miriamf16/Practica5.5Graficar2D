@@ -63,7 +63,7 @@ public class Mundo {
 
         /*verificar si colisiona pilares con el personaje*/
         if(personaje.GetPosicion().y >= ylim || PilarUpper.GetColision().EnColision(personaje.GetColision())
-                || PilarBelow.GetColision().EnColision(personaje.GetColision()))
+            || PilarBelow.GetColision().EnColision(personaje.GetColision()))
         {
             SetFin(true);
             personaje.Danio(PilarUpper.GetDanio());

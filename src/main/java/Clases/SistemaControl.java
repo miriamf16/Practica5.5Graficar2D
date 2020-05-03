@@ -1,9 +1,9 @@
 package Clases;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 
-public class SistemaControl implements KeyListener {
+public class SistemaControl  {
     public double vx,vy;
     private double rate=1;
 
@@ -11,27 +11,23 @@ public class SistemaControl implements KeyListener {
         this.vx=rate;
         this.vy=rate;
     }
-
-    @Override
-    public void keyTyped(KeyEvent k){
-        k.consume();
-    }
-
-    @Override
-    public void keyPressed(KeyEvent k ){
-        if(k.getKeyCode() == KeyEvent.VK_SPACE)
+    public void Manejador(InputEvent evento){
+        if(evento.getEventType() == KeyEvent.KEY_PRESSED)
         {
-            this.vy = -rate;
+            KeyEvent presiono = (KeyEvent)evento;
+            if(presiono.getCode().isWhitespaceKey() )
+            {
+                this.vy = -rate;
+            }
         }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent k ){
-        switch (k.getKeyCode())
+        if (evento.getEventType() == KeyEvent.KEY_RELEASED)
         {
-            case KeyEvent.VK_SPACE:
-                this.vy = rate;
-                break;
+            KeyEvent presiono = (KeyEvent)evento;
+            if(presiono.getCode().isWhitespaceKey() )
+            {
+                this.vy = rate ;
+            }
         }
+
     }
 }
