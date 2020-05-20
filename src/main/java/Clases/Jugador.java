@@ -3,7 +3,7 @@ package Clases;
 public class Jugador extends Objeto2DDinamico {
    private SistemaControl botones;
     private double impulso = 5;
-    private int HPmax = 100;
+    private int HPmax =    20;//100;
     private int HPactual = HPmax;
 
 
@@ -47,7 +47,7 @@ public class Jugador extends Objeto2DDinamico {
         if(!HitState)
         {
             this.HPactual-=dmg;
-            if (this.HPactual<= 0 )
+            if (this.HPactual <= 0 )
             {
                 this.HPactual=0;
             }
@@ -57,6 +57,7 @@ public class Jugador extends Objeto2DDinamico {
 
     /*calculo de daño solo 1 vez*/
     public void Update(){
+
         if(HitState && !InicioTimer)
         {
             timerStar = System.currentTimeMillis();

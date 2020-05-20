@@ -12,10 +12,12 @@ public class Mundo {
     private boolean fin = false;
     private double xlim,ylim;
     public ArrayList<Objeto> ObjetosMundo = new ArrayList<>();
+    private boolean pausa;
 
-    public void init(SistemaControl evento, int widht,int height){
+    public void init(SistemaControl evento, int widht,int height,boolean pausa){
         xlim = widht;
         ylim = height;
+        this.pausa=pausa;
 
 
         bg= new Objeto2D("/bg2.png");
@@ -62,9 +64,8 @@ public class Mundo {
         }
 
         /*verificar si colisiona pilares con el personaje*/
-        if(personaje.GetPosicion().y >= ylim || PilarUpper.GetColision().EnColision(personaje.GetColision())
-            || PilarBelow.GetColision().EnColision(personaje.GetColision()))
-        {
+        if(personaje.GetPosicion().y >= ylim || PilarUpper.GetColision().EnColision(personaje.GetColision()))
+        { //|| PilarBelow.GetColision().EnColision(personaje.GetColision())
             SetFin(true);
             personaje.Danio(PilarUpper.GetDanio());
             System.out.println(PilarUpper.GetDanio()+ " - Vida:" +personaje.GetHPactual());
@@ -111,6 +112,7 @@ public class Mundo {
     }
 
     public void update(){
+        if(pausa == false)
         Reglas();
     }
 
@@ -120,5 +122,13 @@ public class Mundo {
 
     public boolean IsOver(){
         return fin;
+    }
+
+    public Objeto2D getBg() {
+        return bg;
+    }
+
+    public void setBg(Objeto2D bg) {
+        this.bg = bg;
     }
 }

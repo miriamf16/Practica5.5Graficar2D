@@ -1,6 +1,7 @@
 package Clases;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import javax.swing.*;
@@ -25,8 +26,12 @@ public class Canvas extends JPanel {
     //added
     private final JLabel textoVida;
     private final Rectangle barrahp;
+    //private final Rectangle fondo;
+    private boolean pausa;
+    private boolean flag;
+    private JLabel textoContinua;
 
-    public Canvas(SistemaControl evento, javafx.scene.shape.Rectangle vida , JLabel vidatexto ){
+    public Canvas(SistemaControl evento, javafx.scene.shape.Rectangle vida , JLabel vidatexto){
         super();
         this.delay = 1000/fps; //1s = 1000 ms
         miTimer = new Timer(this.delay,gameTimer);
@@ -34,79 +39,113 @@ public class Canvas extends JPanel {
         controles = evento;
         textoVida=vidatexto;
         barrahp = vida;
+        pausa = false;
+        flag = false;
+        textoContinua = new JLabel("Presione M para continuar");
+        textoContinua.setForeground(java.awt.Color.white);
+
 
 
     }
 
     public void init(){
-        Movimiento.SetCanvasLimit(this.getWidth(),this.getHeight());
-        primernivel = new Mundo();
-        primernivel.init(controles,this.getWidth(),this.getHeight());
 
+            Movimiento.SetCanvasLimit(this.getWidth(), this.getHeight());
+            if(pausa == false ) {
+                 primernivel = new Mundo();
+            primernivel.init(controles, this.getWidth(), this.getHeight(), pausa);
+        }
 
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (pausa == false  || flag == true ) {
 
-        primernivel.update();
-        for (Objeto objs : primernivel.ObjetosMundo) {
-            Movimiento.Update(objs);
-            objs.MostrarColision((Graphics2D) g);
-            DibujarImagenes(objs, (Graphics2D) g);
-        }
 
-        if (barrahp != null) {
-            barrahp.setHeight(20);
-            barrahp.setWidth(this.primernivel.GetPersonaje().GetHPactual()*1.5);
-            textoVida.setText(String.valueOf(this.primernivel.GetPersonaje().GetHPactual()));
+            if (primernivel.GetPersonaje().GetHPactual() != 0) {
+                primernivel.update();
 
-            if(primernivel.GetPersonaje().GetHPactual() >= 100 ||  primernivel.GetPersonaje().GetHPactual() > 75 )
-            {
-                barrahp.setFill(Color.SEAGREEN);
-            }
-            else
-                if( primernivel.GetPersonaje().GetHPactual()  <= 75  &&  primernivel.GetPersonaje().GetHPactual()  >= 60  )
-                {
-                    barrahp.setFill(Color.ORANGE);
+                for (Objeto objs : primernivel.ObjetosMundo) {
+                    Movimiento.Update(objs);
+                    objs.MostrarColision((Graphics2D) g);
+                    DibujarImagenes(objs, (Graphics2D) g);
+
                 }
-                else
-                    if( primernivel.GetPersonaje().GetHPactual()  <= 59  &&  primernivel.GetPersonaje().GetHPactual() >  30 ) {
+
+                if (barrahp != null) {
+                    barrahp.setHeight(20);
+                    barrahp.setWidth(this.primernivel.GetPersonaje().GetHPactual() * 1.5);
+                    textoVida.setText(String.valueOf(this.primernivel.GetPersonaje().GetHPactual()));
+
+                    if (primernivel.GetPersonaje().GetHPactual() >= 100 || primernivel.GetPersonaje().GetHPactual() > 75) {
+                        barrahp.setFill(Color.SEAGREEN);
+                    } else if (primernivel.GetPersonaje().GetHPactual() <= 75 && primernivel.GetPersonaje().GetHPactual() >= 60) {
+                        barrahp.setFill(Color.ORANGE);
+                    } else if (primernivel.GetPersonaje().GetHPactual() <= 59 && primernivel.GetPersonaje().GetHPactual() > 30) {
 
                         barrahp.setFill(Color.DARKRED);
-                    }
-                    else
+                    } else
                         barrahp.setFill(Color.DARKVIOLET);
 
 
+                }
+
+
+
+
+                }
+                this.setBackground(java.awt.Color.black);
+                this.add(textoContinua);
+                textoContinua.setVisible(true);
+                textoContinua.setAlignmentX((float)getHeight());
+                textoContinua.setAlignmentY((float)getWidth());
+
+
         }
+
     }
     private void DibujarImagenes(Objeto entidad ,Graphics2D g ){
-        Objeto2D  miEntidad = (Objeto2D) entidad;
+            Objeto2D miEntidad = (Objeto2D) entidad;
 
-        AffineTransform tx = AffineTransform.getScaleInstance(1,1);
+            AffineTransform tx = AffineTransform.getScaleInstance(1, 1);
 
-        BufferedImageOp op = new AffineTransformOp(tx,AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        BufferedImage template = op.filter(miEntidad.GetSuperficie().GetImagen(),null);
-        g.drawImage(template,op,(int)miEntidad.GetPosicion().x,(int)miEntidad.GetPosicion().y);
+            BufferedImageOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            BufferedImage template = op.filter(miEntidad.GetSuperficie().GetImagen(), null);
+            g.drawImage(template, op, (int) miEntidad.GetPosicion().x, (int) miEntidad.GetPosicion().y);
 
     }
 
     public void UpdateFrames(){
-        this.repaint();
+        if(pausa == false )
+        {
+            this.repaint();
+        }
+
+
+
         //System.out.println("repitandondo frames");
+
     }
 
     /*Actualizar la pantalla*/
     public ActionListener gameTimer = actionEvent -> UpdateFrames();
 
 
+    public void setPausa(boolean pausa) {
+        this.pausa = pausa;
+    }
 
+    public boolean getPausa() {
+        return pausa;
+    }
 
+    public boolean getFlag() {
+        return flag;
+    }
 
-
-
-
-
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
 }

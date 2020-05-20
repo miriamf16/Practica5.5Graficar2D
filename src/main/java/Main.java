@@ -7,6 +7,7 @@ import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
@@ -36,10 +37,10 @@ public class Main extends Application {
         MIVentana = Ventana;
         MIVentana.setTitle("Mini Juego con MiniEngine 2D 1.0");
 
-        JLabel vida = new JLabel("VIDA");
+        JLabel vida = new JLabel("Vida");
         JLabel vidavalor = new JLabel("Loading");
-        vida.setFont(new java.awt.Font("Arial",1,20));
-        vidavalor.setFont(new java.awt.Font("Arial",1,20));
+        //vida.setFont(new java.awt.Font("Arial",1,20));
+        //vidavalor.setFont(new java.awt.Font("Arial",1,20));
 
 
         //Conversion nodos JavaFx de los elemntos de swing
@@ -49,7 +50,7 @@ public class Main extends Application {
         nodoVidaValor.setContent(vidavalor);
 
         Rectangle hpbarra = new Rectangle();
-
+        Label vidat = new Label("Vida");
         Canvas mi_canvas = new Canvas(Micontrol,hpbarra,vidavalor);
         mi_canvas.setSize(WIDTH,HEIGHT);
         mi_canvas.init();
@@ -60,7 +61,7 @@ public class Main extends Application {
         Separator linea = new Separator(Orientation.VERTICAL);
         Separator linea2 = new Separator(Orientation.VERTICAL);
 
-        HBox toppanel = new HBox(linea,hpbarra,linea2,nodoVidaValor,nodoVidaTexto);
+        HBox toppanel = new HBox(vidat,linea,hpbarra,linea2,nodoVidaValor);
         toppanel.setPrefWidth(WIDTH+10);
         toppanel.setPrefHeight(25);
 
@@ -71,7 +72,7 @@ public class Main extends Application {
         /*Crear el evento de presionar una tecla*/
 
         EventHandler<InputEvent> teclas = inputEvent -> {
-            Micontrol.Manejador(inputEvent);
+            Micontrol.Manejador(inputEvent,mi_canvas);
             inputEvent.consume();
         };
 
@@ -91,7 +92,6 @@ public class Main extends Application {
         super.stop();
         System.exit(1);
      }
-
 
 
     }
