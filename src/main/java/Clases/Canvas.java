@@ -31,7 +31,7 @@ public class Canvas extends JPanel {
     private boolean flag;
     private JLabel textoContinua;
 
-    public Canvas(SistemaControl evento, javafx.scene.shape.Rectangle vida , JLabel vidatexto){
+    public Canvas(SistemaControl evento, javafx.scene.shape.Rectangle vida,JLabel vidatexto ){
         super();
         this.delay = 1000/fps; //1s = 1000 ms
         miTimer = new Timer(this.delay,gameTimer);
@@ -41,8 +41,11 @@ public class Canvas extends JPanel {
         barrahp = vida;
         pausa = false;
         flag = false;
-        textoContinua = new JLabel("Presione M para continuar");
+        textoContinua = new JLabel("Presiona M para continuar ");
         textoContinua.setForeground(java.awt.Color.white);
+        textoContinua.setFont(new java.awt.Font("Arial", 3, 20));
+        this.add(textoContinua);
+        textoContinua.setVisible(false);
 
 
 
@@ -51,18 +54,18 @@ public class Canvas extends JPanel {
     public void init(){
 
             Movimiento.SetCanvasLimit(this.getWidth(), this.getHeight());
-            if(pausa == false ) {
                  primernivel = new Mundo();
             primernivel.init(controles, this.getWidth(), this.getHeight(), pausa);
-        }
+
 
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (pausa == false  || flag == true ) {
 
+        if (pausa == false) {
+
+            super.paintComponent(g);
 
             if (primernivel.GetPersonaje().GetHPactual() != 0) {
                 primernivel.update();
@@ -89,23 +92,19 @@ public class Canvas extends JPanel {
                     } else
                         barrahp.setFill(Color.DARKVIOLET);
 
-
                 }
 
+            }
 
-
-
-                }
+        if (primernivel.GetPersonaje().GetHPactual() == 0)
+        {
                 this.setBackground(java.awt.Color.black);
-                this.add(textoContinua);
                 textoContinua.setVisible(true);
-                textoContinua.setAlignmentX((float)getHeight());
-                textoContinua.setAlignmentY((float)getWidth());
-
-
+                primernivel.Reset();
         }
-
+        }
     }
+
     private void DibujarImagenes(Objeto entidad ,Graphics2D g ){
             Objeto2D miEntidad = (Objeto2D) entidad;
 
@@ -118,13 +117,8 @@ public class Canvas extends JPanel {
     }
 
     public void UpdateFrames(){
-        if(pausa == false )
-        {
-            this.repaint();
-        }
-
-
-
+        textoContinua.setVisible(false);
+        this.repaint();
         //System.out.println("repitandondo frames");
 
     }
@@ -141,11 +135,7 @@ public class Canvas extends JPanel {
         return pausa;
     }
 
-    public boolean getFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public Mundo getPrimernivel() {
+        return primernivel;
     }
 }

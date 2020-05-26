@@ -13,11 +13,15 @@ public class Jugador extends Objeto2DDinamico {
     private long timerStar;
     private long currentTimer;
 
+    private final SoundPlayer ReproductorSonidos = SoundPlayer.GetInstancia();
+    private Sonido sonidoColision;
+
 
     public Jugador(String imagen,double posx,double posy){
         super(imagen,posx,posy);
         this.HitState=false;
         this.InicioTimer=false;
+        sonidoColision = new Sonido("/Sonidos/Splash.wav");
     }
 
     public void AddControl(SistemaControl controller){
@@ -46,12 +50,13 @@ public class Jugador extends Objeto2DDinamico {
     public void Danio(int dmg){
         if(!HitState)
         {
-            this.HPactual-=dmg;
+            this.HPactual-= dmg;
+            ReproductorSonidos.play(sonidoColision);
             if (this.HPactual <= 0 )
             {
-                this.HPactual=0;
+                this.HPactual = 0;
             }
-            this.HitState=true;
+            this.HitState = true;
         }
     }
 
@@ -71,5 +76,14 @@ public class Jugador extends Objeto2DDinamico {
             InicioTimer = false;
         }
     }
+
+    public int getHPmax(){
+        return  HPmax;
+    }
+    public void setHitState( boolean hitState){
+        this.HitState = HitState;
+    }
+
+
 
 }

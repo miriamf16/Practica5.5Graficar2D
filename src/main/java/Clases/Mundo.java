@@ -13,12 +13,16 @@ public class Mundo {
     private double xlim,ylim;
     public ArrayList<Objeto> ObjetosMundo = new ArrayList<>();
     private boolean pausa;
+    private final SoundPlayer ReproductorSonidos = SoundPlayer.GetInstancia();
+
+    //agregar sonidos
+    private Sonido sonidoBg;
+    private Sonido sonidoPerdio;
 
     public void init(SistemaControl evento, int widht,int height,boolean pausa){
         xlim = widht;
         ylim = height;
         this.pausa=pausa;
-
 
         bg= new Objeto2D("/bg2.png");
         bg.SetEscalar(3,3); // 3 ambos
@@ -27,13 +31,13 @@ public class Mundo {
         personaje.AddControl(evento);
         personaje.SetVelocidad(new Vector2D(0,1));
         personaje.FlipHorizontal();
-        personaje.SetColisionVisble(true);
+        personaje.SetColisionVisble(false);
 
         PilarUpper = new Pilares("/muro1.png",xlim/2,0)  ;
         PilarUpper.RotarImagen(90);
         PilarUpper.SetVelocidad(new Vector2D(-3,0));
         PilarUpper.SetEscalar(0.5,1);
-        PilarUpper.SetColisionVisble(true);
+        PilarUpper.SetColisionVisble(false);
 
         PilarBelow = new Pilares("/muro2.png",xlim/1.25,ylim-20);
         PilarBelow.SetEscalar(0.5,1);
@@ -44,7 +48,11 @@ public class Mundo {
         ObjetosMundo.add(personaje);
         ObjetosMundo.add(PilarUpper);
         ObjetosMundo.add(PilarBelow);
+        //Reproducir sonido
+        sonidoPerdio = new Sonido("/Sonidos/lose.mid");
 
+        sonidoBg = new Sonido("/Sonidos/main.mid");
+        ReproductorSonidos.playloop(sonidoBg,5);
     }
 
     public  void Reglas(){
@@ -81,6 +89,12 @@ public class Mundo {
 
         /*update objetos*/
         personaje.Update();
+        if(personaje.GetHPactual() <=0)
+        {
+            ReproductorSonidos.stop(sonidoBg);
+            ReproductorSonidos.play(sonidoPerdio);
+            SetFin(true);
+        }
 
         int escalaminima = 1;
         int escalamaxima = 3;
@@ -107,12 +121,25 @@ public class Mundo {
 
     }
 
+    public void Reset()
+    {
+        //personaje.SetHPactual(personaje.getHPmax());
+        //personaje.setHitState(false);
+        //personaje.SetPosicion(new Vector2D(0,ylim/2));
+        //PilarUpper.SetPosicion(new Vector2D(xlim/2,0));
+        //PilarBelow.SetPosicion(new Vector2D(xlim/1.25,ylim-20));
+        //setFin(false);
+        ReproductorSonidos.stop(sonidoBg);
+        //ReproductorSonidos.resume(sonidoBg);
+        System.out.println("Reset lvl");
+    }
+
+
     public Jugador GetPersonaje() {
         return personaje;
     }
 
     public void update(){
-        if(pausa == false)
         Reglas();
     }
 
@@ -131,4 +158,7 @@ public class Mundo {
     public void setBg(Objeto2D bg) {
         this.bg = bg;
     }
+
+
+
 }

@@ -16,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import sun.misc.JavaLangAccess;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -39,6 +41,7 @@ public class Main extends Application {
 
         JLabel vida = new JLabel("Vida");
         JLabel vidavalor = new JLabel("Loading");
+        JLabel continua = new JLabel();
         //vida.setFont(new java.awt.Font("Arial",1,20));
         //vidavalor.setFont(new java.awt.Font("Arial",1,20));
 
@@ -48,6 +51,9 @@ public class Main extends Application {
         nodoVidaTexto.setContent(vida);
         SwingNode nodoVidaValor = new SwingNode();
         nodoVidaValor.setContent(vidavalor);
+        SwingNode nodoContinua = new SwingNode();
+        nodoContinua.setContent(continua);
+
 
         Rectangle hpbarra = new Rectangle();
         Label vidat = new Label("Vida");
@@ -61,8 +67,9 @@ public class Main extends Application {
         Separator linea = new Separator(Orientation.VERTICAL);
         Separator linea2 = new Separator(Orientation.VERTICAL);
 
-        HBox toppanel = new HBox(vidat,linea,hpbarra,linea2,nodoVidaValor);
-        toppanel.setPrefWidth(WIDTH+10);
+        HBox toppanel = new HBox(vidat,linea,hpbarra,linea2,nodoVidaValor,nodoContinua);
+
+        toppanel.setPrefWidth(WIDTH);
         toppanel.setPrefHeight(25);
 
         BorderPane layout = new BorderPane();
@@ -94,5 +101,5 @@ public class Main extends Application {
      }
 
 
-    }
+}
 
